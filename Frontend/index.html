@@ -1,0 +1,273 @@
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>PDT - Miloš Pallo</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+	<link rel="stylesheet" href="menu.css">
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map'>
+		<div id='district' class='district'>
+		<div class='inline_field'>
+			<input type="checkbox" id='c1' />
+			<label for="c1">Karlova Ves</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c2' />
+			<label for="c2">Petržalka</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c3' />
+			<label for="c3">Staré mesto</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c4' />
+			<label for="c4">Ružinov</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c5' />
+			<label for="c5">Vrakuňa</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c6' />
+			<label for="c6">Devín</label>
+		</div>
+		<div class='inline_field'>
+			<input type="checkbox" id='c7' />
+			<label for="c7">Dúbravka</label>
+		</div>
+		<div class='inline_field'>		
+			<input type="checkbox" id='c8' />
+			<label for="c8">Lamač</label>
+		</div>
+		<div class='inline_field'>	
+			<input type="checkbox" id='c9' />
+			<label for="c9">Devínska nová Ves</label>
+		</div>
+		<div class='inline_field'>	
+			<input type="checkbox" id='c10' />
+			<label for="c10">Záhorská Bystrica</label>
+		</div>
+		<div class='inline_field'>	
+			<input type="checkbox" id='c11' />
+			<label for="c11">Nové Mesto</label>
+		</div>
+		<div class='inline_field'>	
+			<input type="checkbox" id='c12' />
+			<label for="c12">Rača</label>
+		</div>
+		<div class='inline_field'>	
+			<input type="checkbox" id='c13' />
+			<label for="c13">Vajnory</label>
+		</div>
+	</div>
+	
+	<div id='position' class='position'>
+		<input type = 'text' id = 'h' name = 'h' placeholder = 'Zemepisná šírka'>
+		<input type = 'text' id = 'v' name = 'v' placeholder = 'Zemepisná dĺžka'>
+		<input type = 'text' id = 'radius' name = 'radius' placeholder = 'Maximálna vzdialenosť v metroch'>
+	</div>
+
+	<div id='menu' class='menu'>
+		<label>V zvolených mestských častiach podľa zadaných hodnôt:</label>
+		<div class='list'>
+			<a href = '#' id = 'all_by_district'>Všetky kultúrne miesta</a>
+			<a href = '#' id = 'museums'>Múzeá</a>
+			<a href = '#' id = 'libraries'>Knižnice</a>
+			<a href = '#' id = 'theatres'>Divadlá</a>
+		</div>
+		<a href = '#' id = 'all'>Všetky kultúrne miesta v Bratislave</a>
+		<a href = '#' id = 'hide_places'>Skry nájdené miesta</a>
+	</div>
+	
+
+	
+</div>
+<script>
+	L.mapbox.accessToken = 'pk.eyJ1IjoibWlsb3MxNTkiLCJhIjoiY2l0d3c5dmhlMDAyYTNuazkzaDVsMmFreSJ9.kSCZWHoXpa0h7B-KFg21ZQ';
+	var map = L.mapbox.map('map', 'mapbox.streets',{doubleClickZoom : false})
+    .setView([48.1476906, 17.0627652], 15);
+	
+	L.mapbox.styleLayer('mapbox://styles/milos159/ciw32lbwz00ha2knnkshn1kf9').addTo(map);
+	
+	var myLayer = L.mapbox.featureLayer().addTo(map);
+	
+	map.on('dblclick', function(e) {
+		var latLng = e.latlng;
+		document.getElementsByName('h')[0].value = latLng.lat;
+		document.getElementsByName('v')[0].value = latLng.lng;
+	});
+	
+			myLayer.on('layeradd', function(e) {
+			    var popupContent = "<b>" + e.layer.feature.properties.name + "</b><br/>" + 
+			    				   "Typ " + e.layer.feature.properties.type + "<br/>" + 
+								   "Vzdialenosť od zvoleného bodu (metre): " + e.layer.feature.properties.distance;
+			    e.layer.bindPopup(popupContent,{
+			        closeButton: false,
+			        minWidth: 100
+			    });
+			});
+			
+			map.getContainer().querySelector('#all').onclick = function() {
+				myLayer.clearLayers();
+				jQuery.get("http://localhost:8080/RestApi/app/GeoJson/all", function(response) { 
+					var geojson = response;
+					myLayer.setGeoJSON(geojson);
+				});
+			};
+			
+			map.getContainer().querySelector('#theatres').onclick = function() {
+				myLayer.clearLayers();
+				var c1 = document.getElementById('c1').checked;
+				var c2 = document.getElementById('c2').checked;
+				var c3 = document.getElementById('c3').checked;
+				var c4 = document.getElementById('c4').checked;
+				var c5 = document.getElementById('c5').checked;
+				var c6 = document.getElementById('c6').checked;
+				var c7 = document.getElementById('c7').checked;
+				var c8 = document.getElementById('c8').checked;
+				var c9 = document.getElementById('c9').checked;
+				var c10 = document.getElementById('c10').checked;
+				var c11 = document.getElementById('c11').checked;
+				var c12 = document.getElementById('c12').checked;
+				var c13 = document.getElementById('c13').checked;
+				var h = document.getElementById('h').value;
+				var v = document.getElementById('v').value;
+				var radius = document.getElementById('radius').value;			
+				
+				if (h == "") {
+					h = center.lat;
+				}
+				
+				if (v == "") {
+					v = center.lng;
+				}
+				
+				if (radius == "") {
+					radius = 2500;
+				}
+				
+				jQuery.get("http://localhost:8080/RestApi/app/GeoJson/theatres/" + c1 + "/" + c2 + "/" + c3 + "/" + c4 + "/"  + c5 + "/"
+					 + c6 + "/" + c7 + "/" + c8 + "/" + c9 + "/" + c10 + "/" + c11 + "/" + c12 + "/" + c13 + "/" + v + "/" + h + "/" + radius, function(response) { 
+					var geojson = response;
+					myLayer.setGeoJSON(geojson);
+				});
+			};
+			
+			map.getContainer().querySelector('#museums').onclick = function() {
+				myLayer.clearLayers();
+				var c1 = document.getElementById('c1').checked;
+				var c2 = document.getElementById('c2').checked;
+				var c3 = document.getElementById('c3').checked;
+				var c4 = document.getElementById('c4').checked;
+				var c5 = document.getElementById('c5').checked;
+				var c6 = document.getElementById('c6').checked;
+				var c7 = document.getElementById('c7').checked;
+				var c8 = document.getElementById('c8').checked;
+				var c9 = document.getElementById('c9').checked;
+				var c10 = document.getElementById('c10').checked;
+				var c11 = document.getElementById('c11').checked;
+				var c12 = document.getElementById('c12').checked;
+				var c13 = document.getElementById('c13').checked;
+				var h = document.getElementById('h').value;
+				var v = document.getElementById('v').value;
+				var radius = document.getElementById('radius').value;	
+				var center = map.getCenter();
+				
+				if (h == "") {
+					h = center.lat;
+				}
+				
+				if (v == "") {
+					v = center.lng;
+				}
+				
+				if (radius == "") {
+					radius = 2500;
+				}
+				
+				jQuery.get("http://localhost:8080/RestApi/app/GeoJson/museums/" + c1 + "/" + c2 + "/" + c3 + "/" + c4 + "/"  + c5 + "/"
+					 + c6 + "/" + c7 + "/" + c8 + "/" + c9 + "/" + c10 + "/" + c11 + "/" + c12 + "/" + c13 + "/" + v + "/" + h + "/" + radius, function(response) { 
+					var geojson = response;
+					myLayer.setGeoJSON(geojson);
+				});
+			};
+			
+			map.getContainer().querySelector('#libraries').onclick = function() {
+				myLayer.clearLayers();
+				var c1 = document.getElementById('c1').checked;
+				var c2 = document.getElementById('c2').checked;
+				var c3 = document.getElementById('c3').checked;
+				var c4 = document.getElementById('c4').checked;
+				var c5 = document.getElementById('c5').checked;
+				var c6 = document.getElementById('c6').checked;
+				var c7 = document.getElementById('c7').checked;
+				var c8 = document.getElementById('c8').checked;
+				var c9 = document.getElementById('c9').checked;
+				var c10 = document.getElementById('c10').checked;
+				var c11 = document.getElementById('c11').checked;
+				var c12 = document.getElementById('c12').checked;
+				var c13 = document.getElementById('c13').checked;
+				var h = document.getElementById('h').value;
+				var v = document.getElementById('v').value;
+				var radius = document.getElementById('radius').value;	
+				
+				if (h == "") {
+					h = center.lat;
+				}
+				
+				if (v == "") {
+					v = center.lng;
+				}
+				
+				if (radius == "") {
+					radius = 2500;
+				}
+				
+				jQuery.get("http://localhost:8080/RestApi/app/GeoJson/libraries/" + c1 + "/" + c2 + "/" + c3 + "/" + c4 + "/"  + c5 + "/"
+					 + c6 + "/" + c7 + "/" + c8 + "/" + c9 + "/" + c10 + "/" + c11 + "/" + c12 + "/" + c13 + "/" + v + "/" + h + "/" + radius, function(response) {
+					var geojson = response;
+					myLayer.setGeoJSON(geojson);
+				});
+			};
+			
+			map.getContainer().querySelector('#all_by_district').onclick = function() {
+				myLayer.clearLayers();
+				var c1 = document.getElementById('c1').checked;
+				var c2 = document.getElementById('c2').checked;
+				var c3 = document.getElementById('c3').checked;
+				var c4 = document.getElementById('c4').checked;
+				var c5 = document.getElementById('c5').checked;
+				var c6 = document.getElementById('c6').checked;
+				var c7 = document.getElementById('c7').checked;
+				var c8 = document.getElementById('c8').checked;
+				var c9 = document.getElementById('c9').checked;
+				var c10 = document.getElementById('c10').checked;
+				var c11 = document.getElementById('c11').checked;
+				var c12 = document.getElementById('c12').checked;
+				var c13 = document.getElementById('c13').checked;
+				
+				jQuery.get("http://localhost:8080/RestApi/app/GeoJson/allSorted/" + c1 + "/" + c2 + "/" + c3 + "/" + c4 + "/"  + c5 + "/"
+					 + c6 + "/" + c7 + "/" + c8 + "/" + c9 + "/" + c10 + "/" + c11 + "/" + c12 + "/" + c13 , function(response) { 
+					var geojson = response;
+					myLayer.setGeoJSON(geojson);
+				});
+			};
+			
+			map.getContainer().querySelector('#hide_places').onclick = function() {
+				myLayer.clearLayers();
+			};
+			
+
+</script>
+
+</body>
+</html>

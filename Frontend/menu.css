@@ -1,0 +1,82 @@
+@CHARSET "ISO-8859-1";
+
+
+.menu {
+	background: #2328ce;
+	position: relative;
+	top: 30px;
+	left: 5px;
+	z-index: 1;
+	border-radius: 0px;
+	width: 360px;
+	border: 0px solid #000000;
+}
+
+.menu a {
+	color: #ffffff;
+	font: bold 14px Times New Roman;
+	display: block;
+	padding:5px 10px;
+	border-bottom: 0px solid #000000;
+	text-align: center;
+}
+
+.menu label {
+	color: #ffffff;
+	font: bold 14px Times New Roman;
+	display: block;
+	padding:5px 5px;
+	border-bottom: 0px solid #000000;
+	text-align: left;
+}
+
+.position {
+	background: #2328ce;
+	position: relative;
+	top: 25px;
+	left: 5px;
+	z-index:1 ;
+	border-radius: 0px;
+	width: 250px;
+	border: 0px solid #000000;
+}
+
+.position input[type='text'] {
+	font-size: 14px;
+	color: #0;
+	display: inline-block;
+	padding:3px 5px;
+	width: 250px;
+	text-decoration: none;
+	border: 3px solid #2328ce;
+	text-align: center;
+}
+
+.district {
+	background: #2328ce;
+	position: relative;
+	margin-top: 50px;
+	top: 20px;
+	left: 5px;
+	z-index:1 ;
+	border-radius: 0px;
+	width: 150px;
+	border: 0px solid #000000;
+	padding:0px 5px;
+}
+
+.district input[type='checkbox'] + label {
+	font: 10px;
+	display:inline-block;
+	color: #ffffff;
+}
+
+.list a {
+	color: #ffffff;
+	font: italic 14px Times New Roman;
+	display: block;
+	padding:5px 30px;
+	border-bottom: 0px solid #000000;
+	text-align: left;
+}
+
