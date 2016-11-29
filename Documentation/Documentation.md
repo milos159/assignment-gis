@@ -42,6 +42,7 @@ Backend poskytuje jednoduché REST api volané pomocou HTTP GET dopytov frontedu
 'GET '/allSorted/{c1}/{c2}/{c3}/{c4}/{c5}/{c6}/{c7}/{c8}/{c9}/{c10}/{c11}/{c12}/{c13}'
 
  # Response
+ 
  REST API vracia GeoJSON, ktorý je vstupom pre mapbox.js API.
  Príklad:
  {"properties":{"distance":"3313.2848650300002","name":"Vodárenské múzeum","type":"museum"},"type":"Feature","geometry":{"type":"Point","coordinates":[17.0627652,48.1476906]}}
