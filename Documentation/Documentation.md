@@ -24,7 +24,7 @@ Frontend je realizovaný prostredníctvom jednoduchej HTML stránky ('index.html
 # Backend
 Backend je vytvorený v jazyku Java EE s použítím ws.rs modulu Javy na vytvorenie REST rozhrania. Na beh systému je použitý GlassFish4 server. Webové služby sú dostupné pomocou triedy RestServiceEndpoint.java. Trieda ConnectPostGisDatabase.java realizuje pripojenie servera na PostGis databázu. Jednotlivé dopyty sú v triede DatabaseQueries.java. Na komunikáciu s databázou bola použitá externá knižnica postgresql-9.4.1212.jre6.jar a na prácu s JSON formátom externá knižnica java-json.jar.
  
- # Data
+# Data
 Dáta boli získané z projektu Open Street Maps, pričom bol stiahnutý extrakt Bratislavy zo stránky https://mapzen.com/data/metro-extracts/. Údaje boli importované do PostGis databázy pomocou programu PostGIS Shapefile import/Export Manager. Z databázy získavame údaje vo forme GeoJson pomocou funkcie ST_AsGeoJSON, ktoré obsahujú pozíciu jednotlivých bodov na mape.
   
 # Api
@@ -41,7 +41,7 @@ Backend poskytuje jednoduché REST api volané pomocou HTTP GET dopytov frontedu
 **Získať všetky kultúrne miesta vo zvolenej časti Bratislavy
 'GET '/allSorted/{c1}/{c2}/{c3}/{c4}/{c5}/{c6}/{c7}/{c8}/{c9}/{c10}/{c11}/{c12}/{c13}'
 
- # Response
+# Response
  REST API vracia GeoJSON, ktorý je vstupom pre mapbox.js API.
  Príklad:
  {"properties":{"distance":"3313.2848650300002","name":"Vodárenské múzeum","type":"museum"},"type":"Feature","geometry":{"type":"Point","coordinates":[17.0627652,48.1476906]}}
